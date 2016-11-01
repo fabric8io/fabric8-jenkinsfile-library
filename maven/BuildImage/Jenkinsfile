@@ -1,4 +1,6 @@
 #!/usr/bin/groovy
+@Library('github.com/fabric8io/fabric8-pipeline-plugin@master')
+
 // lets allow the VERSION_PREFIX to be specified as a parameter to the build
 // but if not lets just default to 1.0
 def versionPrefix = ""

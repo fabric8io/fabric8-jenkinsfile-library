@@ -1,4 +1,6 @@
 #!/usr/bin/groovy
+@Library('github.com/fabric8io/fabric8-pipeline-plugin@master')
+
 def utils = new io.fabric8.Utils()
 
 node {
