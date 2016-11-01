@@ -1,0 +1,10 @@
+environments:
+  - Testing
+  - Staging
+  - Production
+stages:
+  - 'canary image'
+  - 'integration test'
+  - 'Rolling upgrade Staging'
+  - 'approve'
+  - 'Rolling upgrade Production'
