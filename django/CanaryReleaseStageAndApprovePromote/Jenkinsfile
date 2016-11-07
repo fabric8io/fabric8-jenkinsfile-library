@@ -6,16 +6,18 @@ def utils = new io.fabric8.Utils()
 node {
   def envStage = utils.environmentNamespace('staging')
   def envProd = utils.environmentNamespace('production')
+  def newVersion = ''
 
-  git GIT_URL
+  clientsNode{
+    git GIT_URL
+    stage 'Canary release'
+    echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
+    if (!fileExists ('Dockerfile')) {
+      writeFile file: 'Dockerfile', text: 'FROM django:onbuild'
+    }
 
-  stage 'Canary release'
-  echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
-  if (!fileExists ('Dockerfile')) {
-    writeFile file: 'Dockerfile', text: 'FROM django:onbuild'
+    newVersion = performCanaryRelease {}
   }
-
-  def newVersion = performCanaryRelease {}
 
   def rc = getKubernetesJson {
     port = 8000
@@ -24,6 +26,7 @@ node {
     version = newVersion
     imageName = clusterImageName
   }
+
 
   stage 'Rolling upgrade Staging'
   kubernetesApply(file: rc, environment: envStage)
