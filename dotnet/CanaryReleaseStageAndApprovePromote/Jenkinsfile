@@ -27,7 +27,7 @@ node {
     imageName = clusterImageName
   }
 
-  stage 'Rolling upgrade Staging'
+  stage 'Rollout Staging'
   kubernetesApply(file: rc, environment: envStage)
 
   stage 'Approve'
@@ -38,7 +38,7 @@ node {
     environment = envStage
   }
 
-  stage 'Rolling upgrade Production'
+  stage 'Rollout Production'
   kubernetesApply(file: rc, environment: envProd)
 
 }

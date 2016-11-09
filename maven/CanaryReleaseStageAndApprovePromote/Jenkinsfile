@@ -62,7 +62,7 @@ podTemplate(label: label, serviceAccount: 'jenkins', containers: [
         itestPattern = localItestPattern
       }
 
-      stage 'Rolling Upgrade Staging'
+      stage 'Rollout Staging'
       kubernetesApply(environment: envStage)
 
       stage 'Approve'
@@ -73,7 +73,7 @@ podTemplate(label: label, serviceAccount: 'jenkins', containers: [
         environment = 'Staging'
       }
 
-      stage 'Rolling Upgrade Production'
+      stage 'Rollout Production'
       kubernetesApply(environment: envProd)
 
     }

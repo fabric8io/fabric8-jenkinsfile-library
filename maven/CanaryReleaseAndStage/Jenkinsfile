@@ -60,7 +60,7 @@ podTemplate(label: label, serviceAccount: 'jenkins', containers: [
         itestPattern = localItestPattern
       }
 
-      stage 'Rolling Upgrade Staging'
+      stage 'Rollout Staging'
       kubernetesApply(environment: envStage)
 
     }
