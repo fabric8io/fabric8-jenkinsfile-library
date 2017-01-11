@@ -1,5 +1,5 @@
 #!/usr/bin/groovy
-@Library('github.com/fabric8io/fabric8-pipeline-library@master')
+@Library('github.com/fabric8io/fabric8-pipeline-library@v2.2.306')
 
 def label = "buildpod.${env.JOB_NAME}.${env.BUILD_NUMBER}".replace('-', '_').replace('/', '_')
 
