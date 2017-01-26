@@ -14,9 +14,9 @@ clientsNode{
     writeFile file: 'Dockerfile', text: 'FROM node:5.3-onbuild'
   }
 
-  newVersion = performCanaryRelease {}
+  newVersion = getDeploymentResources {}
 
-  def rc = getKubernetesJson {
+  def rc = getDeploymentResources {
     port = 8080
     label = 'node'
     icon = 'https://cdn.rawgit.com/fabric8io/fabric8/dc05040/website/src/images/logos/nodejs.svg'
