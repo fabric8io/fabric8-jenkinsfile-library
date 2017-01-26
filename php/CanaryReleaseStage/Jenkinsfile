@@ -16,7 +16,7 @@ clientsNode{
 
   newVersion = performCanaryRelease {}
 
-  def rc = getKubernetesJson {
+  def rc = getDeploymentResources {
     port = 80
     label = 'php'
     icon = 'https://cdn.rawgit.com/fabric8io/fabric8/aebfa59/website/src/images/logos/php.png'
