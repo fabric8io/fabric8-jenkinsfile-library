@@ -31,51 +31,59 @@ def envStage = utils.environmentNamespace('staging')
 def envProd = utils.environmentNamespace('production')
 def stashName = ""
 
-mavenNode {
+if (utils.isCI()){
+  mavenNode {
+    mavenCI{}
+  }
+} else if (utils.isCD()){
+  mavenNode {
 
-  git GIT_URL
+    git GIT_URL
 
-  echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
-  container(name: 'maven') {
+    echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
+    container(name: 'maven') {
 
-    stage 'Build Release'
-    mavenCanaryRelease {
-      version = canaryVersion
+      stage 'Build Release'
+      mavenCanaryRelease {
+        version = canaryVersion
+      }
+
+      stage 'Integration Testing'
+      mavenIntegrationTest {
+        environment = 'Testing'
+        failIfNoTests = localFailIfNoTests
+        itestPattern = localItestPattern
+      }
+
+      stage 'Rollout Staging'
+      kubernetesApply(environment: envStage)
+      //stash deployments
+      stashName = label
+      stash includes: '**/*', name: stashName
     }
+  }
 
-    stage 'Integration Testing'
-    mavenIntegrationTest {
-      environment = 'Testing'
-      failIfNoTests = localFailIfNoTests
-      itestPattern = localItestPattern
-    }
+  node {
+      stage 'Approve'
+      approve {
+        room = null
+        version = canaryVersion
+        console = fabric8Console
+        environment = 'Staging'
+      }
 
-    stage 'Rollout Staging'
-    kubernetesApply(environment: envStage)
-    //stash deployments
-    stashName = label
-    stash includes: '**/*', name: stashName
+      stage 'Rollout Production'
+      unstash stashName
+      def files = findFiles(glob: '**/fabric8/kubernetes.yml')
+
+
+      for(i = 0; i < files.length; i++) {
+        echo "applying the -${files[i].path}- to Kubernetes"
+        def fileContent = readFile(files[i].path)
+        kubernetesApply(file: fileContent,environment: envProd)
+      }
+
   }
 }
 
-node {
-    stage 'Approve'
-    approve {
-      room = null
-      version = canaryVersion
-      console = fabric8Console
-      environment = 'Staging'
-    }
 
-    stage 'Rollout Production'
-    unstash stashName
-    def files = findFiles(glob: '**/fabric8/kubernetes.yml')
-
-
-    for(i = 0; i < files.length; i++) {
-      echo "applying the -${files[i].path}- to Kubernetes"
-      def fileContent = readFile(files[i].path)
-      kubernetesApply(file: fileContent,environment: envProd)
-    }
-
-}
