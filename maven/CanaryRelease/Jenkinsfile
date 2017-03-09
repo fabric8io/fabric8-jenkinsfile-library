@@ -27,27 +27,29 @@ def canaryVersion = "${versionPrefix}.${env.BUILD_NUMBER}"
 def utils = new io.fabric8.Utils()
 def label = "buildpod.${env.JOB_NAME}.${env.BUILD_NUMBER}".replace('-', '_').replace('/', '_')
 
-if (utils.isCI()){
-  mavenNode {
+mavenNode{
+  git GIT_URL
+  if (utils.isCI()){
+    
     mavenCI{}
-  }
-} else if (utils.isCD()){
-  mavenNode{
-    git GIT_URL
-
+    
+  } else if (utils.isCD()){
+  
     echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
     container(name: 'maven') {
 
-      stage 'Build Release'
-      mavenCanaryRelease {
-        version = canaryVersion
+      stage 'Build Release'{
+        mavenCanaryRelease {
+          version = canaryVersion
+        }
       }
-
-      stage 'Integration Test'
-      mavenIntegrationTest {
-        environment = 'Testing'
-        failIfNoTests = localFailIfNoTests
-        itestPattern = localItestPattern
+      
+      stage 'Integration Test'{
+        mavenIntegrationTest {
+          environment = 'Testing'
+          failIfNoTests = localFailIfNoTests
+          itestPattern = localItestPattern
+        }
       }
     }
   }
