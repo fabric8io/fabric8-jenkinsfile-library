@@ -42,19 +42,19 @@ mavenNode {
     echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
     container(name: 'maven') {
 
-      stage 'Build Release'
+      stage('Build Release')
       mavenCanaryRelease {
         version = canaryVersion
       }
 
-      stage 'Integration Testing'
+      stage('Integration Testing')
       mavenIntegrationTest {
         environment = 'Testing'
         failIfNoTests = localFailIfNoTests
         itestPattern = localItestPattern
       }
 
-      stage 'Rollout Staging'
+      stage('Rollout Staging')
       kubernetesApply(environment: envStage)
       //stash deployments
       stashName = label
@@ -63,7 +63,7 @@ mavenNode {
   }
 
   node {
-      stage 'Approve'
+      stage('Approve')
       approve {
         room = null
         version = canaryVersion
@@ -71,7 +71,7 @@ mavenNode {
         environment = 'Staging'
       }
 
-      stage 'Rollout Production'
+      stage('Rollout Production')
       unstash stashName
       def files = findFiles(glob: '**/fabric8/kubernetes.yml')
 
