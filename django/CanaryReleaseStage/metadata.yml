@@ -1,5 +1,5 @@
 environments:
-  - Staging
+  - Stage
 stages:
-  - 'canary release'
-  - 'Rolling upgrade Staging'
+  - 'Create Release'
+  - 'Rollout to Stage'

@@ -1,5 +1,5 @@
 environments:
-  - Testing
+  - Test
 stages:
-  - 'canary image'
-  - 'integration test'
+  - 'Create Release'
+  - 'Integration Test'

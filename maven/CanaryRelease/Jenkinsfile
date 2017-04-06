@@ -46,7 +46,7 @@ mavenNode{
       
       stage('Integration Test'){
         mavenIntegrationTest {
-          environment = 'Testing'
+          environment = 'Test'
           failIfNoTests = localFailIfNoTests
           itestPattern = localItestPattern
         }

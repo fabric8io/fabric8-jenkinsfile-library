@@ -4,11 +4,11 @@
 def utils = new io.fabric8.Utils()
 
 clientsNode{
-  def envStage = utils.environmentNamespace('staging')
+  def envStage = utils.environmentNamespace('stage')
   def newVersion = ''
 
   git GIT_URL
-  stage('Canary release')
+  stage('Create Release')
   echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
   if (!fileExists ('Dockerfile')) {
     writeFile file: 'Dockerfile', text: 'FROM fabric8/php:onbuild'
@@ -24,7 +24,7 @@ clientsNode{
     imageName = clusterImageName
   }
 
-  stage('Rollout Staging')
+  stage('Rollout to Stage')
   kubernetesApply(file: rc, environment: envStage)
 
 }
