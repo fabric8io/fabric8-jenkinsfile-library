@@ -1,8 +1,8 @@
 environments:
-  - Staging
-  - Production
+  - Stage
+  - Run
 stages:
-  - 'canary release'
-  - 'Rolling upgrade Staging'
-  - 'approve'
-  - 'Rolling upgrade Production'
+  - 'Create Release'
+  - 'Rollout to Stage'
+  - 'Approve'
+  - 'Rollout to Run'

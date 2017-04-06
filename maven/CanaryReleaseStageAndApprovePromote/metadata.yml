@@ -1,10 +1,10 @@
 environments:
-  - Testing
-  - Staging
-  - Production
+  - Test
+  - Stage
+  - Run
 stages:
-  - 'canary image'
-  - 'integration test'
-  - 'Rolling upgrade Staging'
-  - 'approve'
-  - 'Rolling upgrade Production'
+  - 'Create Release'
+  - 'Integration Test'
+  - 'Rollout to Stage'
+  - 'Approve'
+  - 'Rollout to Run'

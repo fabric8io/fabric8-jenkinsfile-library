@@ -27,8 +27,8 @@ def canaryVersion = "${versionPrefix}.${env.BUILD_NUMBER}"
 def fabric8Console = "${env.FABRIC8_CONSOLE ?: ''}"
 def utils = new io.fabric8.Utils()
 def label = "buildpod.${env.JOB_NAME}.${env.BUILD_NUMBER}".replace('-', '_').replace('/', '_')
-def envStage = utils.environmentNamespace('staging')
-def envProd = utils.environmentNamespace('production')
+def envStage = utils.environmentNamespace('stage')
+def envProd = utils.environmentNamespace('run')
 def stashName = ""
 
 mavenNode {
@@ -49,12 +49,12 @@ mavenNode {
 
       stage('Integration Testing')
       mavenIntegrationTest {
-        environment = 'Testing'
+        environment = 'Test'
         failIfNoTests = localFailIfNoTests
         itestPattern = localItestPattern
       }
 
-      stage('Rollout Staging')
+      stage('Rollout to Stage')
       kubernetesApply(environment: envStage)
       //stash deployments
       stashName = label
@@ -68,10 +68,10 @@ mavenNode {
         room = null
         version = canaryVersion
         console = fabric8Console
-        environment = 'Staging'
+        environment = 'Stage'
       }
 
-      stage('Rollout Production')
+      stage('Rollout to Run')
       unstash stashName
       def files = findFiles(glob: '**/fabric8/kubernetes.yml')
 
