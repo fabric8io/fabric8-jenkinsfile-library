@@ -73,15 +73,7 @@ mavenNode {
 
       stage('Rollout to Run')
       unstash stashName
-      def files = findFiles(glob: '**/fabric8/kubernetes.yml')
-
-
-      for(i = 0; i < files.length; i++) {
-        echo "applying the -${files[i].path}- to Kubernetes"
-        def fileContent = readFile(files[i].path)
-        kubernetesApply(file: fileContent,environment: envProd)
-      }
-
+      kubernetesApply(environment: envProd)
   }
 }
 
