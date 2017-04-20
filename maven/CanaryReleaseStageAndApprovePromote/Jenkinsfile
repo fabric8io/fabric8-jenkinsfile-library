@@ -22,7 +22,7 @@ try {
   versionPrefix = "2.0"
 }
 
-def canaryVersion = "${versionPrefix}.${env.BUILD_NUMBER}"
+def canaryVersion = "2.0.${env.BUILD_NUMBER}"
 
 def fabric8Console = "${env.FABRIC8_CONSOLE ?: ''}"
 def utils = new io.fabric8.Utils()
