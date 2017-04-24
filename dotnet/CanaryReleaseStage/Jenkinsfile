@@ -5,7 +5,7 @@ clientsNode{
   def envStage = utils.environmentNamespace('stage')
   def newVersion = ''
 
-  git GIT_URL
+  checkout scm
   stage('Create Release')
   echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
   if (!fileExists ('Dockerfile')) {

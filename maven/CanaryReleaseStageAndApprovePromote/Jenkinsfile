@@ -32,7 +32,7 @@ def envProd = utils.environmentNamespace('run')
 def stashName = ""
 
 mavenNode {
-  git GIT_URL
+  checkout scm
   if (utils.isCI()){
 
     mavenCI{}
