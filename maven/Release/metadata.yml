@@ -1,0 +1,5 @@
+environments:
+  - Test
+stages:
+  - 'Build Release'
+  - 'Integration Test'
