@@ -1,5 +1,0 @@
-environments:
-  - Stage
-stages:
-  - 'Create Release'
-  - 'Rollout to Stage'
