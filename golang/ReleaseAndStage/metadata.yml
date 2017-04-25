@@ -1,0 +1,5 @@
+environments:
+  - Stage
+stages:
+  - 'Build Release'
+  - 'Rollout to Stage'
