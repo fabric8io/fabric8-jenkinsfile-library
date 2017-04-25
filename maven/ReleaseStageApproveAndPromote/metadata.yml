@@ -1,7 +1,10 @@
 environments:
   - Test
   - Stage
+  - Run
 stages:
-  - 'Create Release'
+  - 'Build Release'
   - 'Integration Test'
   - 'Rollout to Stage'
+  - 'Approve'
+  - 'Rollout to Run'

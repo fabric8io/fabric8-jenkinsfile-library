@@ -1,5 +1,7 @@
 environments:
   - Test
+  - Stage
 stages:
-  - 'Create Release'
+  - 'Build Release'
   - 'Integration Test'
+  - 'Rollout to Stage'
