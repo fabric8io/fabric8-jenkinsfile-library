@@ -19,10 +19,10 @@ def versionPrefix = ""
 try {
   versionPrefix = VERSION_PREFIX
 } catch (Throwable e) {
-  versionPrefix = "2.0"
+  versionPrefix = "1.0"
 }
 
-def canaryVersion = "2.0.${env.BUILD_NUMBER}"
+def canaryVersion = "${versionPrefix}.${env.BUILD_NUMBER}"
 
 def fabric8Console = "${env.FABRIC8_CONSOLE ?: ''}"
 def utils = new io.fabric8.Utils()
@@ -42,41 +42,45 @@ mavenNode {
     echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
     container(name: 'maven') {
 
-      stage('Build Release')
-      mavenCanaryRelease {
-        version = canaryVersion
-      }
-
-      stage('Integration Testing')
-      mavenIntegrationTest {
-        environment = 'Test'
-        failIfNoTests = localFailIfNoTests
-        itestPattern = localItestPattern
-      }
-
-      stage('Rollout to Stage')
-      kubernetesApply(environment: envStage)
-      //stash deployments
-      stashName = label
-      stash includes: '**/*', name: stashName
-    }
-  }
-
-  if (deploy){
-    node {
-        stage('Approve')
-        approve {
-          room = null
+      stage('Build Release'){
+        mavenCanaryRelease {
           version = canaryVersion
-          console = fabric8Console
-          environment = 'Stage'
         }
+      }
 
-        stage('Rollout to Run')
-        unstash stashName
-        kubernetesApply(environment: envProd)
+      stage('Integration Testing'){
+        mavenIntegrationTest {
+          environment = 'Test'
+          failIfNoTests = localFailIfNoTests
+          itestPattern = localItestPattern
+        }
+      }
+
+      stage('Rollout to Stage'){
+        kubernetesApply(environment: envStage)
+        //stash deployments
+        stashName = label
+        stash includes: '**/*.yml', name: stashName
+      }
     }
   }
 }
 
+if (deploy){
+    node {
+        stage('Approve'){
+          approve {
+            room = null
+            version = canaryVersion
+            console = fabric8Console
+            environment = 'Stage'
+          }
+        }
+
+        stage('Rollout to Run'){
+          unstash stashName
+          kubernetesApply(environment: envProd)
+        }
+    }
+}
 
