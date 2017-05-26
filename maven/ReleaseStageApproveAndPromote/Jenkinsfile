@@ -5,7 +5,7 @@ def localItestPattern = ""
 try {
   localItestPattern = ITEST_PATTERN
 } catch (Throwable e) {
-  localItestPattern = "*KT"
+  localItestPattern = "*IT"
 }
 
 def localFailIfNoTests = ""
