@@ -1,5 +1,11 @@
+suggested: true
+tech-preview: false
 environments:
   - Stage
 stages:
-  - 'Build Release'
-  - 'Rollout to Stage'
+  - name: Build Release
+    description: creates a new version then builds and deploys the project into the maven repository 
+  - name: Rollout to Stage
+    description: stages the new version into the Stage environment
+ 
+ 

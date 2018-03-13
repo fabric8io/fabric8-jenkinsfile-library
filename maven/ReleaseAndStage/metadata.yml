@@ -1,7 +1,13 @@
+suggested: true
+tech-preview: false
 environments:
   - Test
   - Stage
 stages:
-  - 'Build Release'
-  - 'Integration Test'
-  - 'Rollout to Stage'
+  - name: Build Release
+    description: creates a new version then builds and deploys the project into the maven repository 
+  - name: Integration Test
+    description: runs an integration test in the Test environment 
+  - name: Rollout to Stage
+    description: stages the new version into the Stage environment 
+ 
