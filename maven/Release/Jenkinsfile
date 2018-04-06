@@ -2,9 +2,6 @@
 @Library('github.com/fabric8io/fabric8-pipeline-library@master')
 def canaryVersion = "1.0.${env.BUILD_NUMBER}"
 def utils = new io.fabric8.Utils()
-
-// INJECT FRAGMENT setup
-
 mavenNode {
   checkout scm
   if (utils.isCI()){

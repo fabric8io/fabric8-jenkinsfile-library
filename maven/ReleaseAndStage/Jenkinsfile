@@ -6,8 +6,6 @@ def stashName = "buildpod.${env.JOB_NAME}.${env.BUILD_NUMBER}".replace('-', '_')
 def envStage = utils.environmentNamespace('stage')
 def envProd = utils.environmentNamespace('run')
 
-// INJECT FRAGMENT setup
-
 mavenNode {
   checkout scm
   if (utils.isCI()){
