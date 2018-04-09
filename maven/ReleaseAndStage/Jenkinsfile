@@ -16,7 +16,7 @@ mavenNode {
     
   } else if (utils.isCD()) {
     /*
-     * Try to load the script ".openshiftio/Jenkinsfile.setup".
+     * Try to load the script ".openshiftio/Jenkinsfile.setup.groovy".
      * If it exists it must contain two functions named "setupEnvironmentPre()"
      * and "setupEnvironmentPost()" which should contain code that does any extra
      * required setup in OpenShift specific for the booster. The Pre version will
@@ -24,9 +24,9 @@ mavenNode {
      * will be called afterwards.
      */
     try {
-      setupScript = load "${pwd()}/.openshiftio/Jenkinsfile.setup"
+      setupScript = load "${pwd()}/.openshiftio/Jenkinsfile.setup.groovy"
     } catch (Exception ex) {
-      echo "Jenkinsfile.setup not found"
+      echo "Jenkinsfile.setup.groovy not found"
     }
     
     echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
