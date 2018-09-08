@@ -12,8 +12,15 @@ mavenNode {
   checkout scm
   if (utils.isCI()) {
 
-    mavenCI{}
-    
+    mavenCI {
+        integrationTestCmd =
+         "mvn org.apache.maven.plugins:maven-failsafe-plugin:integration-test \
+            org.apache.maven.plugins:maven-failsafe-plugin:verify \
+            -Dnamespace.use.current=false -Dnamespace.use.existing=asds \
+            -Dit.test=*IT -DfailIfNoTests=false -DenableImageStreamDetection=true \
+            -P openshift-it"
+    }
+
   } else if (utils.isCD()) {
     /*
      * Try to load the script ".openshiftio/Jenkinsfile.setup.groovy".
@@ -28,7 +35,7 @@ mavenNode {
     } catch (Exception ex) {
       echo "Jenkinsfile.setup.groovy not found"
     }
-    
+
     echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
     container(name: 'maven') {
       stage('Build Release') {
@@ -60,7 +67,7 @@ if (utils.isCD()) {
         environment = 'Stage'
       }
     }
-    
+
     stage('Rollout to Run') {
       unstash stashName
       setupScript?.setupEnvironmentPre(envProd)

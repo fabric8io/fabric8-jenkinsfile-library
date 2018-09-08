@@ -8,8 +8,15 @@ mavenNode {
   checkout scm
   if (utils.isCI()) {
 
-    mavenCI{}
-    
+    mavenCI {
+        integrationTestCmd =
+             "mvn org.apache.maven.plugins:maven-failsafe-plugin:integration-test \
+                org.apache.maven.plugins:maven-failsafe-plugin:verify \
+                -Dnamespace.use.current=false -Dnamespace.use.existing=${utils.testNamespace()} \
+                -Dit.test=*IT -DfailIfNoTests=false -DenableImageStreamDetection=true \
+                -P openshift-it"
+    }
+
   } else if (utils.isCD()) {
     echo 'NOTE: running pipelines for the first time will take longer as build and base docker images are pulled onto the node'
     container(name: 'maven') {
