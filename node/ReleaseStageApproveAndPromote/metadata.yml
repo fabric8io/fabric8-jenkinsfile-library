@@ -4,12 +4,11 @@ environments:
   - Stage
   - Run
 stages:
-  - name: Build Release
-    description: creates a new version then builds and deploys the project into the maven repository 
+  - name: Build Image
+    description: creates a new version then builds and pushes the image
   - name: Rollout to Stage
     description: stages the new version into the Stage environment
   - name: Approve
-    description: waits for Approval to promote 
+    description: waits for Approval to promote
   - name: Rollout to Run
-    description: promotes to the Run environment 
- 
+    description: promotes to the Run environment
