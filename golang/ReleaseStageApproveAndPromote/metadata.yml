@@ -5,7 +5,7 @@ environments:
   - Run
 stages:
   - name: Build Release
-    description: creates a new version then builds and deploys the project into the maven repository 
+    description: creates a new version then builds and pushes the image
   - name: Rollout to Stage
     description: stages the new version into the Stage environment
   - name: Approve
