@@ -1,9 +1,6 @@
 suggested: false
 tech-preview: false
-environments:
-  - Stage
+
 stages:
   - name: Build Image
     description: creates a new version then builds and pushes the image
-  - name: Rollout to Stage
-    description: stages the new version into the Stage environment
